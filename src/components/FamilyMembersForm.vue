@@ -3,11 +3,11 @@
         <div v-for="(familyMember, index) in employeeFamily" :key="index"
             class="relative border-2 rounded-sm px-8 pt-8 pb-2 mt-8 dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center justify-center">
-                <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-white px-4">
+                <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-[#F9FAFB] px-4">
                     #{{ index + 1 }}
                 </p>
 
-                <p class="absolute top-[-20px] right-20 bg-white px-4">
+                <p class="absolute top-[-20px] right-20 bg-[#F9FAFB] px-4">
                     <span class="material-icons bg-red-500 text-white rounded-md cursor-pointer p-1"
                         @click="deleteFamilyMember(index)">delete_forever</span>
                 </p>

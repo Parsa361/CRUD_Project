@@ -20,7 +20,7 @@
 
             <!-- inner section, family members of employee -->
             <div class="relative mt-10 border-2 rounded-sm px-8 py-6 w-[680px] dark:bg-gray-800 dark:border-gray-700">
-                <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-white px-4">
+                <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-[#F9FAFB] px-4">
                     اعضای خانواده
                 </p>
 
