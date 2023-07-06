@@ -1,6 +1,10 @@
 # goharPajouh_project
 
-This template should help get you started developing with Vue 2 in Vite.
+پروژه پیاده سازی سیستم مدیریت منابع انسانی با انجام عملیات CRUD
+
+https://github.com/Parsa361/CRUD_Project/assets/77281736/14edc2c9-d2b5-4e10-a25a-9c1148fb4ca9
+
+
 
 ## Recommended IDE Setup
 
