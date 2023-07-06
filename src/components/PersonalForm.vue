@@ -17,8 +17,9 @@
         </div>
         <div class="flex flex-col mb-4">
             <label for="dateOfBirth" class="mr-4">تاریخ تولد</label>
-            <input type="date" id="dateOfBirth" placeholder="انتخاب کنید" v-model="employee.dateOfBirth"
-                class="rounded-sm w-[300px] outline-none custom-input" />
+            <input v-model="employee.dateOfBirth" placeholder="انتخاب کنید"
+                class="rounded-sm w-[300px] outline-none custom-input custom-date" type="text" onfocus="(this.type='date')"
+                id="dateOfBirth" />
         </div>
         <!-- email container -->
         <div class="flex flex-col mb-4">
@@ -40,4 +41,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.custom-date::placeholder {
+    text-align: left;
+}
+</style>

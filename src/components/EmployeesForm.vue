@@ -182,7 +182,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .custom-input:focus {
     outline: none;
     border-color: #cbd5e0;

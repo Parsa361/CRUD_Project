@@ -28,8 +28,9 @@
                 <!-- family member birth -->
                 <div class="flex flex-col mb-4">
                     <label :for="'family-dateOfBirth-' + index" class="mr-4">تاریخ تولد</label>
-                    <input :id="'family-dateOfBirth-' + index" type="date" v-model="familyMember.dateOfBirth"
-                        placeholder="انتخاب کنید" class="rounded-sm w-full outline-none custom-input" />
+                    <input v-model="familyMember.dateOfBirth" placeholder="انتخاب کنید"
+                        class="rounded-sm outline-none custom-input custom-date" type="text" onfocus="(this.type='date')"
+                        :id="'family-dateOfBirth-' + index" />
                 </div>
                 <!-- family member relatin -->
                 <div class="flex flex-col mb-4">
@@ -70,4 +71,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.custom-date::placeholder {
+    text-align: left;
+}
+</style>
