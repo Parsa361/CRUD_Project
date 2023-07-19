@@ -3,30 +3,38 @@
     <div class="w-[748px] text-lg text-gray-700 dark:text-gray-600">
       <!-- List of employees -->
       <h1 class="text-black font-medium text-2xl mb-4">کارمندان</h1>
-      <div v-for="employee in employees" :key="employee.id"
-        class="flex items-center justify-between bg-white border rounded-sm dark:bg-gray-800 dark:border-gray-700">
-        <div class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-          {{ employee.firstName + " " + employee.lastName }}
-        </div>
-        <div class="px-6 py-4">
-          <span class="material-icons cursor-pointer" @click="toggleExpandedItem(employee.id)">
-            {{ isExpandedItem(employee.id) ? 'expand_less' : 'expand_more' }}
-          </span>
+
+      <div v-if="!employeeStore.employeesLoading">
+        <div v-for="employee in employeeStore.getEmployees" :key="employee.id"
+          class="bg-white border rounded-sm dark:bg-gray-800 dark:border-gray-700">
+          <div
+            class="flex items-center justify-between px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            {{ employee.firstName + " " + employee.lastName }}
+            <span class="material-icons cursor-pointer" @click="toggleExpandedItem(employee.id)">
+              {{ isExpandedItem(employee.id) ? 'expand_less' : 'expand_more' }}
+            </span>
+          </div>
+          <div v-if="isExpandedItem(employee.id)" class="flex justify-center">
+            <BaseLoading v-if="employeeStore.singleEmployeeLoading"></BaseLoading>
+            <EmployeesForm v-else :isEditingForm="isEditingForm" :singleEmployee="singleEmployee"
+              @employee-removed="removeSingleEmployee" @employee-updated="updateSingleEmployee" />
+          </div>
         </div>
       </div>
-      <EmployeesForm v-if="isExpandedItem(singleEmployee?.id)" :isEditingForm="isEditingForm"
-        :singleEmployee="singleEmployee" @employee-removed="removeSingleEmployee"
-        @employee-updated="updateSingleEmployee" />
+      <div v-if="employeeStore.employeesLoading" class="flex justify-center items-center">
+        <BaseLoading />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import EmployeesForm from './EmployeesForm.vue';
-import { fetchEmployee } from '../services/employeeService.js';
+import BaseLoading from './BaseLoading.vue';
+import { useEmployeeStore } from '../stores/index';
+import { mapStores } from 'pinia';
 
 export default {
-  props: ["employees"],
   data() {
     return {
       singleEmployee: null,
@@ -34,29 +42,28 @@ export default {
       expandedItemId: null
     };
   },
+  computed: {
+    ...mapStores(useEmployeeStore)
+  },
   methods: {
     async fetchEmployeeData(id) {
-      try {
-        const response = await fetchEmployee(id);
-        this.singleEmployee = response;
-        this.loadFamilyData(this.singleEmployee);
-        this.isEditingForm = true;
-      } catch (error) {
-        console.error("Error fetching single employee:", error);
-      }
+      await this.employeeStore.fetchEmployee(id);
+      this.singleEmployee = this.employeeStore.employee;
+      this.splitFamilyMemberName(this.singleEmployee);
+      this.isEditingForm = true;
     },
-    removeSingleEmployee() {
+    async removeSingleEmployee() {
       this.singleEmployee = null;
       this.isEditingForm = false;
       this.expandedItemId = null;
-      this.$emit('new-employee-list');
+      await this.employeeStore.fetchEmployees();
     },
-    updateSingleEmployee() {
+    async updateSingleEmployee() {
       this.isEditingForm = false;
       this.expandedItemId = null;
-      this.$emit('new-employee-list');
+      await this.employeeStore.fetchEmployees();
     },
-    loadFamilyData(singleEmployee) {
+    splitFamilyMemberName(singleEmployee) {
       singleEmployee.family.forEach((familyMember) => {
         const [firstname, lastname] = familyMember.name.split("-");
         familyMember.firstname = firstname;
@@ -74,9 +81,16 @@ export default {
     },
     isExpandedItem(itemId) {
       return this.expandedItemId === itemId;
-    }
+    },
+    // fetch all employees
+    async fetchData() {
+      await this.employeeStore.fetchEmployees();
+    },
   },
-  components: { EmployeesForm }
+  mounted() {
+    this.fetchData();
+  },
+  components: { EmployeesForm, BaseLoading }
 };
 </script>
 

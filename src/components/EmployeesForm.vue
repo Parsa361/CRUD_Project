@@ -1,33 +1,29 @@
 <template>
     <!-- container for entire form -->
-    <div class="relative mt-10 border-2 rounded-sm px-8 py-2 w-[748px] dark:bg-gray-800 dark:border-gray-700"
-        :class="{ 'mt-0 bg-white': isEditingForm }">
+    <div class="relative  px-8 py-2 w-[748px] dark:bg-gray-800 dark:border-gray-700"
+        :class="isEditingForm ? 'bg-white mt-0' : 'mt-10 border-2 rounded-md'">
 
         <p v-if="!isEditingForm" class="font-medium text-2xl absolute top-[-20px] right-6 bg-gray-50 px-4">
             افزودن کارمند
         </p>
         <!-- Removing employee component -->
         <div v-if="isEditingForm" class="my-10 flex justify-end" :class="{ 'my-2': isEditingForm }">
-            <RemovingEmployee :singleEmployeeId="singleEmployee.id" @employee-removed="employeeRemoved" />
+            <RemovingEmployee :singleEmployeeId="singleEmployee.id" />
         </div>
 
         <!-- Employee Form -->
         <form @submit.prevent="submitForm" class="mt-4">
-
             <!-- employee's personal information form -->
             <PersonalForm :employee="employee" :firstNameErrorMsg="firstNameErrorMsg" :lastNameErrorMsg="lastNameErrorMsg"
                 :emailErrorMsg="emailErrorMsg" />
-
             <!-- inner section, family members of employee -->
             <div class="relative mt-10 border-2 rounded-sm px-8 py-6 w-[680px] dark:bg-gray-800 dark:border-gray-700">
                 <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-[#F9FAFB] px-4">
                     اعضای خانواده
                 </p>
-
                 <!-- employee's Family members form -->
                 <FamilyMembersForm :employeeFamily="employee.family" />
             </div>
-
             <!-- BaseButton container for submiting form or canceling it -->
             <FormButtons :isEditingForm="isEditingForm" @cancel-add-employee="cancelAdding"
                 @employee-updated="updateInformation" @submit-form="submitForm" />
@@ -42,7 +38,8 @@ import FamilyMembersForm from './FamilyMembersForm.vue';
 import BaseButton from './BaseButton.vue';
 import RemovingEmployee from './RemovingEmployee.vue';
 import FormButtons from './FormButtons.vue';
-import { addEmployee, updateEmployee } from '../services/employeeService.js';
+import { useEmployeeStore } from '../stores/index';
+import { mapStores } from 'pinia';
 
 export default {
     name: 'EmployeesForm',
@@ -72,7 +69,8 @@ export default {
     computed: {
         isEmailValid() {
             return this.validateEmail(this.employee.email);
-        }
+        },
+        ...mapStores(useEmployeeStore)
     },
     // This watcher is for handling the employee editing mode and
     // it is updating the employee data with singleEmployee data came from EmployeeList
@@ -107,12 +105,10 @@ export default {
                 this.firstNameErrorMsg = 'نام را وارد کنید.';
                 isValid = false;
             }
-
             if (!this.employee.lastName) {
                 this.lastNameErrorMsg = 'نام خانوادگی را وارد کنید.';
                 isValid = false;
             }
-
             if (!this.isEmailValid) {
                 this.emailErrorMsg = 'ایمیل صحیح نیست.';
                 isValid = false;
@@ -135,20 +131,15 @@ export default {
             try {
                 await this.submitFormHandler();
                 this.cancelAdding();
-                this.$emit('new-employee-list');
             } catch (error) {
-                console.error('Error adding employee:', error);
                 this.employeeIsAdded = 'کارمند اضافه نشد, مشکلی رخ داده است.';
+                console.error('Error adding employee:', error);
             }
         },
         async submitFormHandler() {
             this.joinFamilyMemberName();
-            const response = await addEmployee(this.employee);
+            const response = await this.employeeStore.addEmployee(this.employee);
             console.log('employee is added: ', response);
-            return response;
-        },
-        emitNewEmployeeList() {
-            this.$emit('new-employee-list');
         },
         // This function does make the employee.family.name from firstname-lastname
         joinFamilyMemberName() {
@@ -159,24 +150,13 @@ export default {
                 delete familyMember.lastname;
             });
         },
-
         cancelAdding() {
             this.$emit('cancel-add-employee');
         },
-
         async updateInformation() {
-            try {
-                this.joinFamilyMemberName();
-                await updateEmployee(this.singleEmployee.id, this.employee);
-                this.$emit('employee-updated');
-            } catch (error) {
-                console.log('Error updating employee:', error);
-                return;
-            }
+            this.joinFamilyMemberName();
+            await this.employeeStore.updateEmployee(this.singleEmployee.id, this.employee);
         },
-        employeeRemoved() {
-            this.$emit('employee-removed');
-        }
     },
     components: { BaseButton, RemovingEmployee, PersonalForm, FamilyMembersForm, FormButtons },
 };

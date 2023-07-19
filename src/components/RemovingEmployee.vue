@@ -6,19 +6,17 @@
 </template>
 
 <script>
-import { deleteEmployee } from '../services/employeeService.js';
+import { useEmployeeStore } from '../stores/index';
+import { mapStores } from 'pinia';
 
 export default {
     props: ['singleEmployeeId'],
+    computed: {
+        ...mapStores(useEmployeeStore)
+    },
     methods: {
         async removeEmployee() {
-            try {
-                await deleteEmployee(this.singleEmployeeId);
-                this.$emit('employee-removed');
-            } catch (error) {
-                console.error('Error removing employee:', error);
-                return;
-            }
+            await this.employeeStore.deleteEmployee(this.singleEmployeeId);
         },
     }
 };
