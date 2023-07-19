@@ -7,46 +7,21 @@ const headers = {
     authorization: token,
 };
 
-export async function addEmployee(employeeData) {
-    try {
-        const response = await axios.post(apiUrl, employeeData, { headers });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response.data);
-    }
+export function addEmployee(employeeData) {
+    return axios.post(apiUrl, employeeData, { headers });
 }
-export async function fetchEmployees() {
-    try {
-        const response = await axios.get(apiUrl, { headers });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response.data);
-    }
+export function fetchEmployees() {
+    return axios.get(apiUrl, { headers });
 }
 
-export async function fetchEmployee(employeeId) {
-    try {
-        const response = await axios.get(`${apiUrl + '/' + employeeId}`, { headers });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response.data);
-    }
+export function fetchEmployee(employeeId) {
+    return axios.get(`${apiUrl + '/' + employeeId}`, { headers });
 }
 
-export async function updateEmployee(employeeId, employeeData) {
-    try {
-        const response = await axios.put(`${apiUrl + '/' + employeeId}`, employeeData, { headers });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response.data);
-    }
+export function updateEmployee(employeeId, employeeData) {
+    return axios.put(`${apiUrl + '/' + employeeId}`, employeeData, { headers });
 }
 
-export async function deleteEmployee(employeeId) {
-    try {
-        const response = await axios.delete(`${apiUrl + '/' + employeeId}`, { headers });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response.data);
-    }
+export function deleteEmployee(employeeId) {
+    return axios.delete(`${apiUrl + '/' + employeeId}`, { headers });
 }
