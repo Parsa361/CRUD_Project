@@ -12,11 +12,11 @@ export const useEmployeeStore = defineStore('employee', {
             try {
                 this.employeesLoading = true;
                 const response = await fetchEmployees();
-                this.employeesLoading = false;
                 this.employees = response.data;
                 console.log(this.employees);
             } catch (error) {
                 console.log('fetch employees faild', error);
+            } finally {
                 this.employeesLoading = false;
             }
         },
@@ -34,10 +34,12 @@ export const useEmployeeStore = defineStore('employee', {
             try {
                 this.singleEmployeeLoading = true;
                 const response = await fetchEmployee(employeeId);
-                this.singleEmployeeLoading = false;
                 this.employee = response.data;
+                return this.employee;
             } catch (error) {
                 console.log('fetch single employee faild', error);
+                throw error;
+            } finally {
                 this.singleEmployeeLoading = false;
             }
         },
@@ -48,6 +50,7 @@ export const useEmployeeStore = defineStore('employee', {
                 await fetchEmployees();
             } catch (error) {
                 console.log('employee is not deleted!', error);
+            } finally {
                 this.employeesLoading = false;
             }
         },
@@ -59,6 +62,7 @@ export const useEmployeeStore = defineStore('employee', {
                 await fetchEmployees();
             } catch (error) {
                 console.log('employee is not updated!', error);
+            } finally {
                 this.employeesLoading = false;
             }
         }
