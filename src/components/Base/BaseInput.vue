@@ -4,6 +4,7 @@
             <label :for="name" class="mr-4">{{ labelName }}</label>
             <input :id='name' :type="type" :placeholder="placeHolder" :value="value" @input="handleInput"
                 class="rounded-sm w-[300px] outline-none custom-input" :class="errors[0] ? 'border-red-500' : ''" />
+            <span class="text-red-500">{{ errors[0] }}</span>
         </div>
     </ValidationProvider>
 </template>
