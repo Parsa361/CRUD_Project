@@ -1,20 +1,12 @@
 <template>
     <div class="flex flex-wrap justify-between">
         <!-- firstname container -->
-        <div class="flex flex-col mb-4">
-            <label for="firstname" class="mr-4">نام</label>
-            <input id='firstname' type="text" placeholder="احسان" v-model.trim="employee.firstName"
-                class="rounded-sm w-[300px] outline-none custom-input" :class="firstNameErrorMsg ? 'border-red-500' : ''" />
-            <div v-if="firstNameErrorMsg" class="text-red-500">{{ firstNameErrorMsg }}</div>
-        </div>
+        <BaseInput v-model="employee.firstName" name="firstname" rules="required|alpha_spaces" type="text" labelName="نام"
+            placeHolder="احسان" />
         <!-- lastname container-->
-        <div class="flex flex-col mb-4">
-            <label for="lastname" class="mr-4">نام خانوادگی</label>
-            <input id='lastname' type="text" placeholder="رجبی" v-model.trim="employee.lastName"
-                class="rounded-sm w-[300px] outline-none custom-input" :class="lastNameErrorMsg ? 'border-red-500' : ''" />
-            <div v-if="lastNameErrorMsg" class="text-red-500">{{ lastNameErrorMsg }}</div>
-            <!-- birth container -->
-        </div>
+        <BaseInput v-model="employee.lastName" name="lastname" rules="required|alpha_spaces" type="text"
+            labelName="نام خانوادگی" placeHolder="رجبی" />
+        <!-- birth container -->
         <div class="flex flex-col mb-4">
             <label for="dateOfBirth" class="mr-4">تاریخ تولد</label>
             <input v-model="employee.dateOfBirth" placeholder="انتخاب کنید"
@@ -22,22 +14,16 @@
                 id="dateOfBirth" />
         </div>
         <!-- email container -->
-        <div class="flex flex-col mb-4">
-            <label for="email" class="mr-4">ایمیل</label>
-            <input id='email' type="email" v-model.trim="employee.email"
-                class="rounded-sm w-[300px] outline-none custom-input" :class="emailErrorMsg ? 'border-red-500' : ''" />
-            <div v-if="emailErrorMsg" class="text-red-400">{{ emailErrorMsg }}</div>
-        </div>
+        <BaseInput v-model="employee.email" name="email" rules="required|email" type="email" labelName="ایمیل"
+            placeHolder="" />
     </div>
 </template>
 
 <script>
+import BaseInput from './Base/BaseInput.vue';
 export default {
-    props: ['employee', 'firstNameErrorMsg', 'lastNameErrorMsg', 'emailErrorMsg'],
-    data() {
-        return {
-        };
-    }
+    props: ["employee"],
+    components: { BaseInput }
 };
 </script>
 

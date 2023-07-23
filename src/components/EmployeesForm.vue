@@ -7,27 +7,29 @@
             افزودن کارمند
         </p>
         <!-- Removing employee component -->
+
         <div v-if="isEditingForm" class="my-10 flex justify-end" :class="{ 'my-2': isEditingForm }">
             <RemovingEmployee :singleEmployeeId="singleEmployee.id" />
         </div>
 
         <!-- Employee Form -->
-        <form @submit.prevent="submitForm" class="mt-4">
-            <!-- employee's personal information form -->
-            <PersonalForm :employee="employee" :firstNameErrorMsg="firstNameErrorMsg" :lastNameErrorMsg="lastNameErrorMsg"
-                :emailErrorMsg="emailErrorMsg" />
-            <!-- inner section, family members of employee -->
-            <div class="relative mt-10 border-2 rounded-sm px-8 py-6 w-[680px] dark:bg-gray-800 dark:border-gray-700">
-                <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-[#F9FAFB] px-4">
-                    اعضای خانواده
-                </p>
-                <!-- employee's Family members form -->
-                <FamilyMembersForm :employeeFamily="employee.family" />
-            </div>
-            <!-- BaseButton container for submiting form or canceling it -->
-            <FormButtons :isEditingForm="isEditingForm" @cancel-add-employee="cancelAdding"
-                @employee-updated="updateInformation" @submit-form="submitForm" />
-        </form>
+        <ValidationObserver v-slot="{ handleSubmit }">
+            <form @submit.prevent="handleSubmit(submitForm)" class="mt-4">
+                <!-- employee's personal information form -->
+                <PersonalForm :employee="employee" />
+                <!-- inner section, family members of employee -->
+                <div class="relative mt-10 border-2 rounded-sm px-8 py-6 w-[680px] dark:bg-gray-800 dark:border-gray-700">
+                    <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-[#F9FAFB] px-4">
+                        اعضای خانواده
+                    </p>
+                    <!-- employee's Family members form -->
+                    <FamilyMembersForm :employeeFamily="employee.family" />
+                </div>
+                <!-- BaseButton container for submiting form or canceling it -->
+                <FormButtons :isEditingForm="isEditingForm" @cancel-add-employee="cancelAdding"
+                    @employee-updated="updateInformation" @submit-form="submitForm" />
+            </form>
+        </ValidationObserver>
         <div v-if="employeeIsAdded" class="text-lg text-red-500 flex justify-center">{{ employeeIsAdded }}</div>
     </div>
 </template>
@@ -67,9 +69,6 @@ export default {
         };
     },
     computed: {
-        isEmailValid() {
-            return this.validateEmail(this.employee.email);
-        },
         ...mapStores(useEmployeeStore)
     },
     // This watcher is for handling the employee editing mode and
@@ -92,43 +91,9 @@ export default {
         },
     },
     methods: {
-        validateEmail(email) {
-            // Email validation logic
-            const emailRegex = /^\S+@\S+\.\S+$/;
-            return emailRegex.test(email);
-        },
-
-        validateForm() {
-            let isValid = true;
-
-            if (!this.employee.firstName) {
-                this.firstNameErrorMsg = 'نام را وارد کنید.';
-                isValid = false;
-            }
-            if (!this.employee.lastName) {
-                this.lastNameErrorMsg = 'نام خانوادگی را وارد کنید.';
-                isValid = false;
-            }
-            if (!this.isEmailValid) {
-                this.emailErrorMsg = 'ایمیل صحیح نیست.';
-                isValid = false;
-            }
-
-            return isValid;
-        },
         async submitForm() {
-            this.firstNameErrorMsg = '';
-            this.lastNameErrorMsg = '';
-            this.emailErrorMsg = '';
-            this.employeeIsAdded = '';
-
-            const isValid = this.validateForm();
-
-            if (!isValid) {
-                return;
-            }
-
             try {
+                console.log('is working');
                 await this.submitFormHandler();
                 this.cancelAdding();
             } catch (error) {
