@@ -7,7 +7,6 @@
             افزودن کارمند
         </p>
         <!-- Removing employee component -->
-
         <div v-if="isEditingForm" class="my-10 flex justify-end" :class="{ 'my-2': isEditingForm }">
             <RemovingEmployee :singleEmployeeId="singleEmployee.id" />
         </div>
@@ -27,17 +26,16 @@
                 </div>
                 <!-- BaseButton container for submiting form or canceling it -->
                 <FormButtons :isEditingForm="isEditingForm" @cancel-add-employee="cancelAdding"
-                    @employee-updated="updateInformation" @submit-form="submitForm" />
+                    @employee-updated="updateInformation" @submit-form="submitForm" :loading="loading" />
             </form>
         </ValidationObserver>
-        <div v-if="employeeIsAdded" class="text-lg text-red-500 flex justify-center">{{ employeeIsAdded }}</div>
     </div>
 </template>
 
 <script>
 import PersonalForm from './PersonalForm.vue';
 import FamilyMembersForm from './FamilyMembersForm.vue';
-import BaseButton from './BaseButton.vue';
+import BaseButton from './Base/BaseButton.vue';
 import RemovingEmployee from './RemovingEmployee.vue';
 import FormButtons from './FormButtons.vue';
 import { useEmployeeStore } from '../stores/index';
@@ -62,10 +60,7 @@ export default {
                     }
                 ]
             },
-            emailErrorMsg: '',
-            firstNameErrorMsg: '',
-            lastNameErrorMsg: '',
-            employeeIsAdded: ''
+            loading: false,
         };
     },
     computed: {
@@ -97,7 +92,6 @@ export default {
                 await this.submitFormHandler();
                 this.cancelAdding();
             } catch (error) {
-                this.employeeIsAdded = 'کارمند اضافه نشد, مشکلی رخ داده است.';
                 console.error('Error adding employee:', error);
             }
         },
@@ -120,7 +114,9 @@ export default {
         },
         async updateInformation() {
             this.joinFamilyMemberName();
+            this.loading = true;
             await this.employeeStore.updateEmployee(this.singleEmployee.id, this.employee);
+            this.loading = false;
         },
     },
     components: { BaseButton, RemovingEmployee, PersonalForm, FamilyMembersForm, FormButtons },

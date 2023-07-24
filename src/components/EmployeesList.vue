@@ -16,7 +16,7 @@
 
 <script>
 import EmployeeItem from './EmployeeItem.vue';
-import BaseLoading from './BaseLoading.vue';
+import BaseLoading from './Base/BaseLoading.vue';
 import { useEmployeeStore } from '../stores/index';
 import { mapStores } from 'pinia';
 

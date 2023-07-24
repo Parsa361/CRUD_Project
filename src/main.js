@@ -5,7 +5,8 @@ import App from './App.vue';
 import router from './router';
 import VeeValidatePlugin from './includes/validation';
 
-import './assets/main.css';
+import './assets/styles/main.css';
+import './assets/styles/animation.css';
 
 Vue.use(PiniaVuePlugin);
 Vue.use(VeeValidatePlugin);

@@ -5,15 +5,16 @@
             <BaseButton class="bg-gray-500" type="button" @click="$emit('cancel-add-employee')">انصراف</BaseButton>
         </div>
         <div v-if="isEditingForm" class="flex justify-center">
-            <BaseButton type="button" class="bg-emerald-500" @click="$emit('employee-updated')">بروزرسانی</BaseButton>
+            <BaseButton type="button" class="bg-emerald-500" @click="$emit('employee-updated')" :loading="loading">بروزرسانی
+            </BaseButton>
         </div>
     </div>
 </template>
 
 <script>
-import BaseButton from './BaseButton.vue';
+import BaseButton from './Base/BaseButton.vue';
 export default {
-    props: ['isEditingForm'],
+    props: ['isEditingForm', 'loading'],
     components: { BaseButton }
 };
 </script>

@@ -13,7 +13,7 @@
 
 <script>
 import EmployeesList from '../components/EmployeesList.vue';
-import BaseButton from '../components/BaseButton.vue';
+import BaseButton from '../components/Base/BaseButton.vue';
 import EmployeesForm from '../components/EmployeesForm.vue';
 
 export default {

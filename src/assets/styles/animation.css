@@ -1,0 +1,17 @@
+/* loader needs width and height where it used */
+.loader {
+    border: 8px solid rgba(66, 60, 60, 0.3);
+    border-top: 8px solid #cc1188;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -19,7 +19,7 @@
 import { useEmployeeStore } from '../stores/index';
 import { mapStores } from 'pinia';
 import EmployeesForm from './EmployeesForm.vue';
-import BaseLoading from './BaseLoading.vue';
+import BaseLoading from './Base/BaseLoading.vue';
 
 export default {
     props: ['employee'],
