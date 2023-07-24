@@ -24,21 +24,20 @@ export default {
     methods: {
         async removeEmployee() {
             try {
-                this.removeHandler();
+                await this.removeHandler();
                 this.$notify({
                     group: 'app',
                     title: 'حذف موفق',
                     text: 'کارمند مورد نظر حذف شد.',
                     type: 'success',
                 });
-                await this.employeeStore.fetchEmployees();
             } catch (error) {
                 console.log(error);
                 this.$notify({
                     group: 'app',
                     title: 'حذف ناموفق',
                     text: 'کارمند حذف نشد! مشکلی رخ داده است.',
-                    type: 'errror',
+                    type: 'error',
                 });
             }
         },
@@ -46,6 +45,7 @@ export default {
             this.loading = true;
             await this.employeeStore.deleteEmployee(this.singleEmployeeId);
             this.loading = false;
+            this.$emit('employeeDeleted');
         }
     },
     components: { BaseButton }

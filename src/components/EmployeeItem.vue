@@ -10,7 +10,8 @@
         <div class="flex justify-center">
             <BaseLoading v-if="isLoading"></BaseLoading>
             <EmployeesForm v-else-if="isExpanded && singleEmployee" :isEditingForm="isExpanded"
-                :singleEmployee="singleEmployee" />
+                :singleEmployee="singleEmployee" @employeeUpdated="$emit('employeeUpdated')"
+                @employeeDeleted="$emit('employeeDeleted')" />
         </div>
     </div>
 </template>

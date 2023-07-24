@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col items-center">
     <!-- Here we shows our employees list -->
-    <EmployeesList />
+    <EmployeesList @employeeUpdated="onEmployeeUpdated" @employeeDeleted="onEmployeeDeleted" />
 
     <!-- This button is responsible for set the visibility of the form -->
     <BaseButton v-if="!isShowForm" type="button" class="bg-emerald-500" @click="showForm">افزودن کارمند</BaseButton>
 
     <!-- Employee form -->
-    <EmployeesForm v-if="isShowForm" @cancel-add-employee="cancelAddEmployee" />
+    <EmployeesForm v-if="isShowForm" @cancel-add-employee="cancelAddEmployee" @fetch-employees="fetchEmployeesData" />
   </div>
 </template>
 
@@ -15,6 +15,9 @@
 import EmployeesList from '../components/EmployeesList.vue';
 import BaseButton from '../components/Base/BaseButton.vue';
 import EmployeesForm from '../components/EmployeesForm.vue';
+import { useEmployeeStore } from '../stores/index';
+import { mapStores } from 'pinia';
+
 
 export default {
   name: "App",
@@ -28,12 +31,24 @@ export default {
       isShowForm: false,
     };
   },
+  computed: {
+    ...mapStores(useEmployeeStore)
+  },
   methods: {
     showForm() {
       this.isShowForm = true;
     },
     cancelAddEmployee() {
       this.isShowForm = false;
+    },
+    onEmployeeUpdated() {
+      this.fetchEmployeesData();
+    },
+    onEmployeeDeleted() {
+      this.fetchEmployeesData();
+    },
+    async fetchEmployeesData() {
+      await this.employeeStore.fetchEmployees();
     },
   },
 }

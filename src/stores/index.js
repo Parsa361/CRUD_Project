@@ -41,7 +41,7 @@ export const useEmployeeStore = defineStore('employee', {
             await deleteEmployee(employeeId);
         },
         async updateEmployee(employeeId, employeeData) {
-            const response = await updateEmployee(employeeId, employeeData);
+            await updateEmployee(employeeId, employeeData);
         }
     },
     getters: {

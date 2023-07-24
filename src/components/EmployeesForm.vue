@@ -8,7 +8,7 @@
         </p>
         <!-- Removing employee component -->
         <div v-if="isEditingForm" class="my-10 flex justify-end" :class="{ 'my-2': isEditingForm }">
-            <RemovingEmployee :singleEmployeeId="singleEmployee.id" />
+            <RemovingEmployee :singleEmployeeId="singleEmployee.id" @employeeDeleted="$emit('employeeDeleted')" />
         </div>
 
         <!-- Employee Form -->
@@ -101,7 +101,7 @@ export default {
             const response = await this.employeeStore.addEmployee(this.employee);
             this.loading = false;
             this.cancelAdding();
-            await this.employeeStore.fetchEmployees();
+            this.fetchingAgain();
             console.log('employee is added: ', response);
         },
         // This function does make the employee.family.name from firstname-lastname
@@ -116,21 +116,24 @@ export default {
         cancelAdding() {
             this.$emit('cancel-add-employee');
         },
+        fetchingAgain() {
+            this.$emit('fetch-employees');
+        },
         async updateInformation() {
             try {
                 await this.updateHandler();
-                Vue.notify({
+                this.$notify({
                     group: 'app',
                     title: 'آپدیت موفق',
                     text: 'اطلاعات کارمند بروزرسانی شد.',
-                    type: 'success',
+                    type: 'info',
                 });
             } catch (error) {
-                Vue.notify({
+                this.$notify({
                     group: 'app',
                     title: 'آپدیت ناموفق',
                     text: 'اطلاعات کارمند بروزرسانی نشد.',
-                    type: 'info',
+                    type: 'error',
                 });
             }
         },
@@ -139,7 +142,8 @@ export default {
             this.loading = true;
             await this.employeeStore.updateEmployee(this.singleEmployee.id, this.employee);
             this.loading = false;
-            await this.employeeStore.fetchEmployees();
+            this.fetchingAgain();
+            this.$emit('employeeUpdated');
         }
     },
     components: { BaseButton, RemovingEmployee, PersonalForm, FamilyMembersForm, FormButtons },
