@@ -1,24 +1,35 @@
 <template>
     <div>
-        <span @click="removeEmployee"
-            class="material-icons bg-red-500 text-white rounded-md cursor-pointer text-2xl px-2 py-1">delete_forever</span>
+        <BaseButton :loading="loading" @click="removeEmployee" class="rounded-lg cursor-pointer bg-red-500"><span
+                class="material-icons text-white">delete_forever</span>
+        </BaseButton>
     </div>
 </template>
 
 <script>
+import BaseButton from './Base/BaseButton.vue';
 import { useEmployeeStore } from '../stores/index';
 import { mapStores } from 'pinia';
 
 export default {
-    props: ['singleEmployeeId'],
+    props: ["singleEmployeeId"],
+    data() {
+        return {
+            loading: false
+        };
+    },
     computed: {
         ...mapStores(useEmployeeStore)
     },
     methods: {
         async removeEmployee() {
+            this.loading = true;
             await this.employeeStore.deleteEmployee(this.singleEmployeeId);
+            this.loading = false;
+            await this.employeeStore.fetchEmployees();
         },
-    }
+    },
+    components: { BaseButton }
 };
 </script>
 

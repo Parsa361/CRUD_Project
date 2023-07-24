@@ -97,7 +97,10 @@ export default {
         },
         async submitFormHandler() {
             this.joinFamilyMemberName();
+            this.loading = true;
             const response = await this.employeeStore.addEmployee(this.employee);
+            this.loading = false;
+            await this.employeeStore.fetchEmployees();
             console.log('employee is added: ', response);
         },
         // This function does make the employee.family.name from firstname-lastname
@@ -117,15 +120,11 @@ export default {
             this.loading = true;
             await this.employeeStore.updateEmployee(this.singleEmployee.id, this.employee);
             this.loading = false;
+            await this.employeeStore.fetchEmployees();
         },
     },
     components: { BaseButton, RemovingEmployee, PersonalForm, FamilyMembersForm, FormButtons },
 };
 </script>
 
-<style>
-.custom-input:focus {
-    outline: none;
-    border-color: #cbd5e0;
-}
-</style>
+<style scoped></style>
