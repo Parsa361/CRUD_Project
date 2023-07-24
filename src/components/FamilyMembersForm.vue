@@ -71,8 +71,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.custom-date::placeholder {
-    text-align: left;
-}
-</style>
+<style scoped></style>

@@ -43,7 +43,7 @@ import { mapStores } from 'pinia';
 
 export default {
     name: 'EmployeesForm',
-    props: ['isShowingForm', 'isEditingForm', 'singleEmployee'],
+    props: ['isEditingForm', 'singleEmployee'],
     data() {
         return {
             employee: {

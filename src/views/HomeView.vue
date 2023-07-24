@@ -4,10 +4,10 @@
     <EmployeesList />
 
     <!-- This button is responsible for set the visibility of the form -->
-    <BaseButton v-if="!isShowingForm" type="button" class="bg-emerald-500" @click="showForm">افزودن کارمند</BaseButton>
+    <BaseButton v-if="!isShowForm" type="button" class="bg-emerald-500" @click="showForm">افزودن کارمند</BaseButton>
 
     <!-- Employee form -->
-    <EmployeesForm v-if="isShowingForm" :isShowingForm="isShowingForm" @cancel-add-employee="cancelAddEmployee" />
+    <EmployeesForm v-if="isShowForm" @cancel-add-employee="cancelAddEmployee" />
   </div>
 </template>
 
@@ -25,15 +25,15 @@ export default {
   },
   data() {
     return {
-      isShowingForm: false,
+      isShowForm: false,
     };
   },
   methods: {
     showForm() {
-      this.isShowingForm = true;
+      this.isShowForm = true;
     },
     cancelAddEmployee() {
-      this.isShowingForm = false;
+      this.isShowForm = false;
     },
   },
 }
