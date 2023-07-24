@@ -8,8 +8,11 @@ import VeeValidatePlugin from './includes/validation';
 import './assets/styles/main.css';
 import './assets/styles/animation.css';
 
+import Notifications from 'vue-notification';
+
 Vue.use(PiniaVuePlugin);
 Vue.use(VeeValidatePlugin);
+Vue.use(Notifications);
 
 
 new Vue({

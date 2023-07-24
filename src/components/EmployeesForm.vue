@@ -46,20 +46,7 @@ export default {
     props: ['isEditingForm', 'singleEmployee'],
     data() {
         return {
-            employee: {
-                firstName: "",
-                lastName: "",
-                email: "",
-                dateOfBirth: "",
-                family: [
-                    {
-                        firstname: "",
-                        lastname: "",
-                        dateOfBirth: "",
-                        relation: ""
-                    }
-                ]
-            },
+            employee: { "firstName": "parsa", "lastName": "ali", "email": "mamaloo@gmail.com", "dateOfBirth": "2023-06-30", "family": [{ "firstname": "آمنه", "lastname": "فدایی", "dateOfBirth": "2023-07-11", "relation": "son" }] },
             loading: false,
         };
     },
@@ -90,8 +77,21 @@ export default {
             try {
                 console.log('is working');
                 await this.submitFormHandler();
-                this.cancelAdding();
+                this.$notify({
+                    group: 'app',
+                    title: 'افزودن موفق',
+                    text: 'کارمند با موفقیت اضافه شد.',
+                    type: 'success',
+                    duration: 3000
+                });
             } catch (error) {
+                this.$notify({
+                    group: 'app',
+                    title: 'افزودن ناموفق',
+                    text: 'کارمند اضافه نشد! مشکلی رخ داده است.',
+                    type: 'errror',
+                    duration: 3000
+                });
                 console.error('Error adding employee:', error);
             }
         },
@@ -100,6 +100,7 @@ export default {
             this.loading = true;
             const response = await this.employeeStore.addEmployee(this.employee);
             this.loading = false;
+            this.cancelAdding();
             await this.employeeStore.fetchEmployees();
             console.log('employee is added: ', response);
         },
@@ -116,12 +117,30 @@ export default {
             this.$emit('cancel-add-employee');
         },
         async updateInformation() {
+            try {
+                await this.updateHandler();
+                Vue.notify({
+                    group: 'app',
+                    title: 'آپدیت موفق',
+                    text: 'اطلاعات کارمند بروزرسانی شد.',
+                    type: 'success',
+                });
+            } catch (error) {
+                Vue.notify({
+                    group: 'app',
+                    title: 'آپدیت ناموفق',
+                    text: 'اطلاعات کارمند بروزرسانی نشد.',
+                    type: 'info',
+                });
+            }
+        },
+        async updateHandler() {
             this.joinFamilyMemberName();
             this.loading = true;
             await this.employeeStore.updateEmployee(this.singleEmployee.id, this.employee);
             this.loading = false;
             await this.employeeStore.fetchEmployees();
-        },
+        }
     },
     components: { BaseButton, RemovingEmployee, PersonalForm, FamilyMembersForm, FormButtons },
 };

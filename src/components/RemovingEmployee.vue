@@ -23,11 +23,30 @@ export default {
     },
     methods: {
         async removeEmployee() {
+            try {
+                this.removeHandler();
+                this.$notify({
+                    group: 'app',
+                    title: 'حذف موفق',
+                    text: 'کارمند مورد نظر حذف شد.',
+                    type: 'success',
+                });
+                await this.employeeStore.fetchEmployees();
+            } catch (error) {
+                console.log(error);
+                this.$notify({
+                    group: 'app',
+                    title: 'حذف ناموفق',
+                    text: 'کارمند حذف نشد! مشکلی رخ داده است.',
+                    type: 'errror',
+                });
+            }
+        },
+        async removeHandler() {
             this.loading = true;
             await this.employeeStore.deleteEmployee(this.singleEmployeeId);
             this.loading = false;
-            await this.employeeStore.fetchEmployees();
-        },
+        }
     },
     components: { BaseButton }
 };

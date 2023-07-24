@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { defineStore } from 'pinia';
 import { addEmployee, fetchEmployees, fetchEmployee, updateEmployee, deleteEmployee } from '../services/employeeService';
 export const useEmployeeStore = defineStore('employee', {
@@ -20,13 +21,6 @@ export const useEmployeeStore = defineStore('employee', {
                 this.employeesLoading = false;
             }
         },
-        async addEmployee(employeeData) {
-            try {
-                return await addEmployee(employeeData);
-            } catch (error) {
-                console.log('adding employee faild', error);
-            }
-        },
         async fetchEmployee(employeeId) {
             try {
                 this.singleEmployeeLoading = true;
@@ -40,20 +34,14 @@ export const useEmployeeStore = defineStore('employee', {
                 this.singleEmployeeLoading = false;
             }
         },
+        async addEmployee(employeeData) {
+            return await addEmployee(employeeData);
+        },
         async deleteEmployee(employeeId) {
-            try {
-                await deleteEmployee(employeeId);
-            } catch (error) {
-                console.log('employee is not deleted!', error);
-            }
+            await deleteEmployee(employeeId);
         },
         async updateEmployee(employeeId, employeeData) {
-            try {
-                const response = await updateEmployee(employeeId, employeeData);
-                console.log(response.data);
-            } catch (error) {
-                console.log('employee is not updated!', error);
-            }
+            const response = await updateEmployee(employeeId, employeeData);
         }
     },
     getters: {
