@@ -7,14 +7,14 @@
     <BaseButton v-if="!isShowForm" type="button" class="bg-emerald-500" @click="showForm">افزودن کارمند</BaseButton>
 
     <!-- Employee form -->
-    <EmployeesForm v-if="isShowForm" @cancel-add-employee="cancelAddEmployee" @fetch-employees="fetchEmployeesData" />
+    <AddingEmployee v-if="isShowForm" @notExpanded="cancelAddEmployee" @employeeAdded="fetchEmployeesData" />
   </div>
 </template>
 
 <script>
 import EmployeesList from '../components/EmployeesList.vue';
 import BaseButton from '../components/Base/BaseButton.vue';
-import EmployeesForm from '../components/EmployeesForm.vue';
+import AddingEmployee from '../components/AddingEmployee.vue';
 import { useEmployeeStore } from '../stores/index';
 import { mapStores } from 'pinia';
 
@@ -24,7 +24,7 @@ export default {
   components: {
     BaseButton,
     EmployeesList,
-    EmployeesForm
+    AddingEmployee
   },
   data() {
     return {
@@ -45,6 +45,9 @@ export default {
       this.fetchEmployeesData();
     },
     onEmployeeDeleted() {
+      this.fetchEmployeesData();
+    },
+    onEmployeeAdded() {
       this.fetchEmployeesData();
     },
     async fetchEmployeesData() {

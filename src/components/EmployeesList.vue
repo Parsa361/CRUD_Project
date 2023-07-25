@@ -5,7 +5,7 @@
       <h1 class="text-black font-medium text-2xl mb-4">کارمندان</h1>
 
       <div v-if="!employeeStore.employeesLoading">
-        <EmployeeItem v-for="employee in employeeStore.getEmployees" :key="employee.id" :employee="employee"
+        <EmployeeItem v-for="employee in employeeStore.getEmployees" :key="employee.id" :employeeListItem="employee"
           @employeeUpdated="$emit('employeeUpdated')" @employeeDeleted="$emit('employeeDeleted')" />
       </div>
       <div v-if="employeeStore.employeesLoading" class="flex justify-center items-center">
@@ -24,7 +24,6 @@ import { mapStores } from 'pinia';
 export default {
   data() {
     return {
-
       expandedItemId: null
     };
   },
