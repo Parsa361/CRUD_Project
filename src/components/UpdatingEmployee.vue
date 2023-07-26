@@ -3,14 +3,14 @@
         <ValidationObserver v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(onUpdate)" class="mt-4">
                 <!-- employee's personal information form -->
-                <PersonalForm :employee="modelSingleEmployee" />
+                <PersonalForm :employee="modelemployeeInfo" />
                 <!-- inner section, family members of employee -->
                 <div class="relative mt-10 border-2 rounded-sm px-8 py-6 w-[680px] dark:bg-gray-800 dark:border-gray-700">
                     <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-[#F9FAFB] px-4">
                         اعضای خانواده
                     </p>
                     <!-- employee's Family members form -->
-                    <FamilyMembersForm :employeeFamily="modelSingleEmployee.family" />
+                    <FamilyMembersForm :employeeFamily="modelemployeeInfo.family" />
                 </div>
                 <!-- BaseButton container for submiting form or canceling it -->
                 <div>
@@ -35,11 +35,11 @@ import { mapStores } from 'pinia';
 import _ from 'lodash/lang';
 
 export default {
-    props: ['singleEmployee'],
+    props: ['employeeInfo'],
     data() {
         return {
             loading: false,
-            modelSingleEmployee: null
+            modelemployeeInfo: null
         };
     },
     methods: {
@@ -64,13 +64,13 @@ export default {
         async updateHandler() {
             this.joinFamilyMemberName();
             this.loading = true;
-            await this.employeeStore.updateEmployee(this.modelSingleEmployee.id, this.modelSingleEmployee);
+            await this.employeeStore.updateEmployee(this.modelemployeeInfo.id, this.modelemployeeInfo);
             this.loading = false;
-            this.$emit('employeeUpdated', this.modelSingleEmployee);
+            this.$emit('employeeUpdated', this.modelemployeeInfo);
         },
         // This function does make the employee.family.name from firstname-lastname
         joinFamilyMemberName() {
-            this.modelSingleEmployee.family.forEach((familyMember) => {
+            this.modelemployeeInfo.family.forEach((familyMember) => {
                 familyMember.name = `${familyMember.firstname}-${familyMember.lastname}`;
                 // delete the firstname, lastname properties from employee data
                 delete familyMember.firstname;
@@ -79,9 +79,9 @@ export default {
         },
     },
     // This watcher is for handling the employee editing mode and
-    // it is updating the employee data with singleEmployee data came from EmployeeList
+    // it is updating the employee data with employeeInfo data came from EmployeeList
     watch: {
-        singleEmployee: {
+        employeeInfo: {
 
         },
     },
@@ -89,7 +89,7 @@ export default {
         ...mapStores(useEmployeeStore)
     },
     beforeMount() {
-        this.modelSingleEmployee = _.cloneDeep(this.singleEmployee);
+        this.modelemployeeInfo = _.cloneDeep(this.employeeInfo);
     },
     components: { BaseButton, PersonalForm, FamilyMembersForm },
 };

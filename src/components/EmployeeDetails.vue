@@ -6,7 +6,7 @@
         <div v-if="!loading">
             <!-- Removing employee component -->
             <div class="my-10 flex justify-end items-center gap-x-2">
-                <RemovingEmployee :singleEmployeeId="singleEmployee.id" @employeeDeleted="$emit('employeeDeleted')" />
+                <RemovingEmployee :employeeInfoId="employeeInfo.id" @employeeDeleted="$emit('employeeDeleted')" />
                 <!-- edit information icon -->
                 <BaseButton v-if="!isEditingForm" @click="isEditingForm = !isEditingForm" class="bg-blue-400"><span
                         class="material-icons">
@@ -15,23 +15,23 @@
                 </BaseButton>
             </div>
 
-            <UpdatingEmployee v-if="isEditingForm" :singleEmployee="singleEmployee" @employeeUpdated="onEmployeeUpdated"
+            <UpdatingEmployee v-if="isEditingForm" :employeeInfo="employeeInfo" @employeeUpdated="onEmployeeUpdated"
                 @cancelUpdate="onCancelUpdate" />
 
             <div v-else>
                 <!-- Personal info section -->
                 <div class="flex flex-wrap justify-between">
-                    <BaseDiv labelName="نام" :value="singleEmployee.firstName" class="w-[300px] h-[42.46]" />
-                    <BaseDiv labelName="نام خانوادگی" :value="singleEmployee.lastName" class="w-[300px] h-[42.46]" />
-                    <BaseDiv labelName="تاریخ تولد" :value="singleEmployee.dateOfBirth" class="w-[300px] h-[42.46]" />
-                    <BaseDiv labelName="ایمیل" :value="singleEmployee.email" class="w-[300px] h-[42.46]" />
+                    <BaseDiv labelName="نام" :value="employeeInfo.firstName" class="w-[300px] h-[42.46]" />
+                    <BaseDiv labelName="نام خانوادگی" :value="employeeInfo.lastName" class="w-[300px] h-[42.46]" />
+                    <BaseDiv labelName="تاریخ تولد" :value="employeeInfo.dateOfBirth" class="w-[300px] h-[42.46]" />
+                    <BaseDiv labelName="ایمیل" :value="employeeInfo.email" class="w-[300px] h-[42.46]" />
                 </div>
                 <div class="relative mt-10 border-2 rounded-sm px-8 py-6 w-[680px] dark:bg-gray-800 dark:border-gray-700">
                     <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-[#F9FAFB] px-4">
                         اعضای خانواده
                     </p>
                     <!-- Family member info section -->
-                    <div v-for="(familyMember, index) in singleEmployee.family" :key="index"
+                    <div v-for="(familyMember, index) in employeeInfo.family" :key="index"
                         class="relative border-2 rounded-sm px-8 pt-8 pb-2 mt-8 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center justify-center">
                             <div class="flex items-center justify-center">
@@ -77,7 +77,7 @@ export default {
     data() {
         return {
             isEditingForm: false,
-            singleEmployee: null,
+            employeeInfo: null,
             loading: false
         };
     },
@@ -85,25 +85,25 @@ export default {
         onCancelUpdate() {
             this.isEditingForm = false;
         },
-        onEmployeeUpdated(copySingleEmployee) {
-            this.singleEmployee = copySingleEmployee;
+        onEmployeeUpdated(copyemployeeInfo) {
+            this.employeeInfo = copyemployeeInfo;
             this.isEditingForm = false;
             this.$emit('employeeUpdated');
         },
         async fetchEmployeeData(id) {
             try {
                 this.loading = true;
-                this.singleEmployee = await this.employeeStore.fetchEmployee(id);
-                this.splitFamilyMemberName(this.singleEmployee);
-                console.log(this.singleEmployee);
+                this.employeeInfo = await this.employeeStore.fetchEmployee(id);
+                this.splitFamilyMemberName(this.employeeInfo);
+                console.log(this.employeeInfo);
             } catch (error) {
                 console.log(error);
             } finally {
                 this.loading = false;
             }
         },
-        splitFamilyMemberName(singleEmployee) {
-            singleEmployee.family.forEach((familyMember) => {
+        splitFamilyMemberName(employeeInfo) {
+            employeeInfo.family.forEach((familyMember) => {
                 const [firstname, lastname] = familyMember.name.split("-");
                 familyMember.firstname = firstname;
                 familyMember.lastname = lastname;

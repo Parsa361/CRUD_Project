@@ -12,7 +12,7 @@ import { useEmployeeStore } from '../stores/index';
 import { mapStores } from 'pinia';
 
 export default {
-    props: ["singleEmployeeId"],
+    props: ["employeeInfoId"],
     data() {
         return {
             loading: false
@@ -43,7 +43,7 @@ export default {
         },
         async removeHandler() {
             this.loading = true;
-            await this.employeeStore.deleteEmployee(this.singleEmployeeId);
+            await this.employeeStore.deleteEmployee(this.employeeInfoId);
             this.loading = false;
             this.$emit('employeeDeleted');
         }
