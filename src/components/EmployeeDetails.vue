@@ -1,8 +1,5 @@
 <template>
     <div class="px-8 py-2 dark:bg-gray-800 dark:border-gray-700">
-
-
-
         <div v-if="!loading">
             <!-- Removing employee component -->
             <div class="my-10 flex justify-end items-center gap-x-2">
@@ -56,7 +53,7 @@
         </div>
 
         <!-- Loading -->
-        <div v-else>
+        <div class="flex justify-center items-center" v-else>
             <BaseLoading />
         </div>
     </div>

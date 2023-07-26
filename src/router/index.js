@@ -13,6 +13,24 @@ const router = new VueRouter({
       name: 'home',
       component: HomeView
     },
+    {
+      path: '/employee/',
+      name: 'EmployeeList',
+      component: () => import('../views/EmployeeListView.vue'),
+      props: true
+    },
+    {
+      path: '/employee/:employeeId',
+      name: 'EmployeeInformation',
+      component: () => import('../views/EmployeeInformationView.vue'),
+      props: true
+    },
+    {
+      path: '/employee-dropdown',
+      name: 'EmployeeDropDown',
+      component: () => import('../views/EmployeeDropDownView.vue'),
+      props: true
+    },
 
   ]
 });
