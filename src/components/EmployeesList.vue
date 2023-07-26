@@ -4,11 +4,11 @@
       <!-- List of employees -->
       <h1 class="text-black font-medium text-2xl mb-4">کارمندان</h1>
 
-      <div v-if="!employeeStore.employeesLoading">
+      <div v-if="!loading">
         <EmployeeItem v-for="employee in employeeStore.getEmployees" :key="employee.id" :employeeListItem="employee"
           @employeeUpdated="$emit('employeeUpdated')" @employeeDeleted="$emit('employeeDeleted')" />
       </div>
-      <div v-if="employeeStore.employeesLoading" class="flex justify-center items-center">
+      <div v-if="loading" class="flex justify-center items-center">
         <BaseLoading />
       </div>
     </div>
@@ -24,7 +24,8 @@ import { mapStores } from 'pinia';
 export default {
   data() {
     return {
-      expandedItemId: null
+      expandedItemId: null,
+      loading: false
     };
   },
   computed: {
@@ -33,7 +34,9 @@ export default {
   methods: {
     // fetch all employees
     async fetchData() {
+      this.loading = true;
       await this.employeeStore.fetchEmployees();
+      this.loading = false;
     },
   },
   mounted() {

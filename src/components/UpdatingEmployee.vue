@@ -78,11 +78,15 @@ export default {
             });
         },
     },
-    // This watcher is for handling the employee editing mode and
-    // it is updating the employee data with employeeInfo data came from EmployeeList
     watch: {
         employeeInfo: {
-
+            // This handler will be triggered when the 'employeeInfo' prop changes
+            immediate: true, // This option will trigger the handler immediately on component mount
+            // The handler function will receive the new value of 'employeeInfo'
+            handler(newEmployeeInfo) {
+                // You can deep clone the newEmployeeInfo if needed
+                this.modelemployeeInfo = _.cloneDeep(newEmployeeInfo);
+            },
         },
     },
     computed: {
