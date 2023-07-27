@@ -10,6 +10,7 @@
                         edit_note
                     </span>
                 </BaseButton>
+                <slot name="pushBack"></slot>
             </div>
 
             <UpdatingEmployee v-if="isEditingForm" :employeeInfo="employeeInfo" @employeeUpdated="onEmployeeUpdated"
