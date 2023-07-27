@@ -5,19 +5,24 @@
                 <!-- List of employees -->
                 <div class="flex justify-start items-center mb-4">
                     <h1 class="text-black font-medium text-2xl">کارمندان</h1>
-                    <span v-if="loading" class="loader w-5 h-5 mr-4"></span>
+                    <span v-if="loading" class="loader w-5 h-5 mr-3"></span>
                 </div>
 
-                <!-- Here we shows our employees list -->
-                <EmployeeItem2 v-for="employee in employeeStore.getEmployees" :key="employee.id"
-                    :employeeListItem="employee" />
-
-                <!-- This button is responsible for set the visibility of the form -->
-                <BaseButton v-if="!isShowForm" type="button" class="bg-emerald-500 mx-auto" @click="showForm">افزودن کارمند
-                </BaseButton>
-
-                <!-- Employee form -->
-                <AddingEmployee v-if="isShowForm" @notExpanded="cancelAddEmployee" @employeeAdded="fetchEmployeesData" />
+                <div v-if="initialLoading" class="flex justify-center items-center">
+                    <BaseLoading />
+                </div>
+                <div v-else>
+                    <!-- Here we shows our employees list -->
+                    <EmployeeItem2 v-for="employee in employeeStore.getEmployees" :key="employee.id"
+                        :employeeListItem="employee" />
+                    <!-- This button is responsible for set the visibility of the form -->
+                    <BaseButton v-if="!isShowForm" type="button" class="bg-emerald-500 mx-auto" @click="showForm">افزودن
+                        کارمند
+                    </BaseButton>
+                    <!-- Employee form -->
+                    <AddingEmployee v-if="isShowForm" @notExpanded="cancelAddEmployee"
+                        @employeeAdded="fetchEmployeesData" />
+                </div>
             </div>
         </div>
     </div>
@@ -36,14 +41,15 @@ export default {
     name: "App",
     components: {
         BaseButton,
+        BaseLoading,
         AddingEmployee,
         EmployeeItem2,
-        BaseLoading
     },
     data() {
         return {
             isShowForm: false,
-            loading: false
+            initialLoading: false,
+            loading: false,
         };
     },
     computed: {
@@ -67,9 +73,14 @@ export default {
             await this.employeeStore.fetchEmployees();
             this.loading = false;
         },
+        async initialFetchEmployeesData() {
+            this.initialLoading = true;
+            await this.employeeStore.fetchEmployees();
+            this.initialLoading = false;
+        },
     },
     mounted() {
-        this.fetchEmployeesData();
+        this.initialFetchEmployeesData();
     },
 }
 
