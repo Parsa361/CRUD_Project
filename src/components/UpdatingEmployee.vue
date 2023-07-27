@@ -3,14 +3,14 @@
         <ValidationObserver v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(onUpdate)" class="mt-4">
                 <!-- employee's personal information form -->
-                <PersonalForm :employee="modelemployeeInfo" />
+                <PersonalForm :employee="modelEmployeeInfo" />
                 <!-- inner section, family members of employee -->
                 <div class="relative mt-10 border-2 rounded-sm px-8 py-6 w-[680px] dark:bg-gray-800 dark:border-gray-700">
                     <p class="font-medium text-2xl absolute top-[-20px] right-6 bg-[#F9FAFB] px-4">
                         اعضای خانواده
                     </p>
                     <!-- employee's Family members form -->
-                    <FamilyMembersForm :employeeFamily="modelemployeeInfo.family" />
+                    <FamilyMembersForm :employeeFamily="modelEmployeeInfo.family" />
                 </div>
                 <!-- BaseButton container for submiting form or canceling it -->
                 <div>
@@ -39,12 +39,13 @@ export default {
     data() {
         return {
             loading: false,
-            modelemployeeInfo: null
+            modelEmployeeInfo: null
         };
     },
     methods: {
         async onUpdate() {
             try {
+                this.loading = true;
                 await this.updateHandler();
                 this.$notify({
                     group: 'app',
@@ -59,22 +60,19 @@ export default {
                     text: 'اطلاعات کارمند بروزرسانی نشد.',
                     type: 'error',
                 });
+            } finally {
+                this.loading = false;
             }
         },
         async updateHandler() {
             this.joinFamilyMemberName();
-            this.loading = true;
-            await this.employeeStore.updateEmployee(this.modelemployeeInfo.id, this.modelemployeeInfo);
-            this.loading = false;
-            this.$emit('employeeUpdated', this.modelemployeeInfo);
+            await this.employeeStore.updateEmployee(this.modelEmployeeInfo.id, this.modelEmployeeInfo);
+            this.$emit('employeeUpdated', this.modelEmployeeInfo);
         },
         // This function does make the employee.family.name from firstname-lastname
         joinFamilyMemberName() {
-            this.modelemployeeInfo.family.forEach((familyMember) => {
+            this.modelEmployeeInfo.family.forEach((familyMember) => {
                 familyMember.name = `${familyMember.firstname}-${familyMember.lastname}`;
-                // delete the firstname, lastname properties from employee data
-                delete familyMember.firstname;
-                delete familyMember.lastname;
             });
         },
     },
@@ -85,7 +83,7 @@ export default {
             // The handler function will receive the new value of 'employeeInfo'
             handler(newEmployeeInfo) {
                 // You can deep clone the newEmployeeInfo if needed
-                this.modelemployeeInfo = _.cloneDeep(newEmployeeInfo);
+                this.modelEmployeeInfo = _.cloneDeep(newEmployeeInfo);
             },
         },
     },
@@ -93,7 +91,7 @@ export default {
         ...mapStores(useEmployeeStore)
     },
     beforeMount() {
-        this.modelemployeeInfo = _.cloneDeep(this.employeeInfo);
+        this.modelEmployeeInfo = _.cloneDeep(this.employeeInfo);
     },
     components: { BaseButton, PersonalForm, FamilyMembersForm },
 };
