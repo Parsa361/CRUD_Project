@@ -3,7 +3,8 @@
         <div
             class="flex items-center justify-between px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {{ employeeListItem.firstName + " " + employeeListItem.lastName }}
-            <BaseButton class="bg-gray-500" @click="goToEmployeeListItem">جزئیات</BaseButton>
+            <BaseButton class="bg-gray-500 cursor-pointer"
+                :to="{ name: 'EmployeeInformation', params: { employeeId: this.employeeListItem.id } }">جزئیات</BaseButton>
         </div>
     </div>
 </template>
@@ -14,16 +15,6 @@ import BaseLoading from './Base/BaseLoading.vue';
 
 export default {
     props: ['employeeListItem'],
-    methods: {
-        goToEmployeeListItem() {
-            this.$router.push({
-                name: 'EmployeeInformation',
-                params: {
-                    employeeId: this.employeeListItem.id
-                }
-            });
-        }
-    },
     components: { BaseLoading, BaseButton },
 };
 </script>
