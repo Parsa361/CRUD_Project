@@ -74,9 +74,19 @@ export default {
             this.loading = false;
         },
         async initialFetchEmployeesData() {
-            this.initialLoading = true;
-            await this.employeeStore.fetchEmployees();
-            this.initialLoading = false;
+            try {
+                this.initialLoading = true;
+                await this.employeeStore.fetchEmployees();
+            } catch (error) {
+                this.$notify({
+                    group: 'app',
+                    title: 'بارگیری ناموفق',
+                    text: 'بارگیری لیست کارمندان ناموفق بود.',
+                    type: 'error',
+                });
+            } finally {
+                this.initialLoading = false;
+            }
         },
     },
     mounted() {

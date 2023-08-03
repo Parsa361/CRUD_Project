@@ -14,6 +14,7 @@ export const useEmployeeStore = defineStore('employee', {
                 console.log(this.employees);
             } catch (error) {
                 console.log('fetch employees faild', error);
+                throw error;
             }
         },
         async fetchEmployee(employeeId) {
