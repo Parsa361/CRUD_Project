@@ -7,6 +7,7 @@ import VeeValidatePlugin from './includes/validation';
 
 import './assets/styles/main.css';
 import './assets/styles/animation.css';
+import './includes/datepicker';
 
 import Notifications from 'vue-notification';
 

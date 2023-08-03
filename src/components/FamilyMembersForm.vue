@@ -28,9 +28,12 @@
                 <!-- family member birth -->
                 <div class="flex flex-col mb-4">
                     <label :for="'family-dateOfBirth-' + index" class="mr-4">تاریخ تولد</label>
-                    <input v-model="familyMember.dateOfBirth" placeholder="انتخاب کنید"
+                    <!-- <input v-model="familyMember.dateOfBirth" placeholder="انتخاب کنید"
                         class="rounded-sm outline-none custom-input custom-date" type="text" onfocus="(this.type='date')"
-                        :id="'family-dateOfBirth-' + index" />
+                        :id="'family-dateOfBirth-' + index" /> -->
+
+                    <date-picker simple v-model="familyMember.dateOfBirth" placeholder="انتخاب کنید"
+                        class="rounded-sm outline-none custom-input custom-date" :id="'family-dateOfBirth-' + index" />
                 </div>
                 <!-- family member relatin -->
                 <div class="flex flex-col mb-4">

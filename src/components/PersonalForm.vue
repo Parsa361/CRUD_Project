@@ -9,9 +9,11 @@
         <!-- birth container -->
         <div class="flex flex-col mb-4">
             <label for="dateOfBirth" class="mr-4">تاریخ تولد</label>
-            <input v-model="employee.dateOfBirth" placeholder="انتخاب کنید"
+            <!-- <input v-model="employee.dateOfBirth" placeholder="انتخاب کنید"
                 class="rounded-sm w-[300px] outline-none custom-input custom-date" type="text" onfocus="(this.type='date')"
-                id="dateOfBirth" />
+                id="dateOfBirth" /> -->
+            <date-picker simple v-model="employee.dateOfBirth" placeholder="انتخاب کنید"
+                class="rounded-sm w-[300px] outline-none custom-input custom-date" id="dateOfBirth" />
         </div>
         <!-- email container -->
         <BaseInput v-model="employee.email" name="email" rules="required|email" type="email" labelName="ایمیل"
